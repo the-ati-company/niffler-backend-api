@@ -10,4 +10,11 @@ WORKDIR /app
 
 COPY requirements.txt requirements.txt
 
+RUN pip install --no-cache-dir -r ./requirements.txt
+
+COPY api api
+COPY src src
+COPY firestore-service-account.json firestore-service-account.json
+
+
 EXPOSE 8087
