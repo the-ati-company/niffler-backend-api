@@ -31,7 +31,7 @@ jobs:
         run: |
           echo "BRANCH=staging" >> $GITHUB_ENV
           echo "PROJECT_ID=${{ vars.NIFFLER_FIREBASE_PROJECT_ID_STG }}" >> $GITHUB_ENV
-          echo "IMAGE_NAME"=niffler-backend-api:stglatest >> $GITHUB_ENV
+          echo "IMAGE_NAME"=niffler-backend-api:stg-latest >> $GITHUB_ENV
           echo "GCLOUD_REPO_REGION=asia-southeast1-docker.pkg.dev" >> $GITHUB_ENV
           echo "GCLOUD_REPO_NAME=$GCLOUD_REPO_REGION/niffler-stg" >> $GITHUB_ENV
           printf "%s" "$SERVICE_ACCOUNT" > service-account.json
