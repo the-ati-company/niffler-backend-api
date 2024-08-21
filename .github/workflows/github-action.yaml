@@ -26,22 +26,25 @@ jobs:
       - name: Prepare Stg Envs
         if:  contains(fromJson('["staging","ymc/deploy-cloud-run"]'), env.BRANCH)
         env: 
-          SERVICE_ACCOUNT: ${{ secrets.CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER_STG }}
+          SERVICE_ACCOUNT: ${{ secrets.NIFFLER_FIREBASE_SERVICE_ACCOUNT_STG }}
+          CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER: ${{ secrets.CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER_STG }}
         run: |
           echo "BRANCH=staging" >> $GITHUB_ENV
           echo "PROJECT_ID=${{ vars.NIFFLER_FIREBASE_PROJECT_ID_STG }}" >> $GITHUB_ENV
           echo "IMAGE_NAME"=niffler_backend_api-stg:latest >> $GITHUB_ENV
           printf "%s" "$SERVICE_ACCOUNT" > service-account.json
+          printf "%s" "$CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER" > could-run-service-account.json
 
       - name: Prepare Prod Envs
         if:  contains(fromJson('["production"]'), env.BRANCH)
         env:
-          SERVICE_ACCOUNT: ${{ secrets.CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER }}
+          SERVICE_ACCOUNT: ${{ secrets.NIFFLER_FIREBASE_SERVICE_ACCOUNT_STG }}
+          CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER: ${{ secrets.CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER }}
         run: |
           echo "BRANCH=production" >> $GITHUB_ENV
           echo "PROJECT_ID=${{ vars.NIFFLER_FIREBASE_PROJECT_ID }}" >> $GITHUB_ENV
           echo "IMAGE_NAME"=niffler_backend_api:latest >> $GITHUB_ENV
-          printf "%s" "$SERVICE_ACCOUNT" > service-account.json
+          printf "%s" "$CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER" > could-run-service-account.json
 
       - name: Login Docker Hub
         uses: docker/login-action@v3
@@ -68,12 +71,13 @@ jobs:
       
       - name: gCloud CLI login
         run: |
-          gcloud auth login --no-launch-browser --cred-file=service-account.json
+          gcloud auth login --no-launch-browser --cred-file=could-run-service-account.json
+          gcloud config set project $PROJECT_ID
           gcloud auth list
 
       - name: Deploy to Cloud Run
         run: |
-          echo ""
+          gcloud run deploy niffler-backend-api --image ymcsabo/${{ env.IMAGE_NAME }} --region asia-east1
 
 
       
