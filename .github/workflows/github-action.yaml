@@ -26,7 +26,7 @@ jobs:
       - name: Prepare Stg Envs
         if:  contains(fromJson('["staging","ymc/deploy-cloud-run"]'), env.BRANCH)
         env: 
-          SERVICE_ACCOUNT: ${{ secrets.NIFFLER_FIREBASE_SERVICE_ACCOUNT_STG }}
+          SERVICE_ACCOUNT: ${{ secrets.CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER_STG }}
         run: |
           echo "BRANCH=staging" >> $GITHUB_ENV
           echo "PROJECT_ID=${{ vars.NIFFLER_FIREBASE_PROJECT_ID_STG }}" >> $GITHUB_ENV
@@ -36,7 +36,7 @@ jobs:
       - name: Prepare Prod Envs
         if:  contains(fromJson('["production"]'), env.BRANCH)
         env:
-          SERVICE_ACCOUNT: ${{ secrets.NIFFLER_FIREBASE_SERVICE_ACCOUNT }}
+          SERVICE_ACCOUNT: ${{ secrets.CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER }}
         run: |
           echo "BRANCH=production" >> $GITHUB_ENV
           echo "PROJECT_ID=${{ vars.NIFFLER_FIREBASE_PROJECT_ID }}" >> $GITHUB_ENV
@@ -57,6 +57,18 @@ jobs:
           tags: ymcsabo/${{ env.IMAGE_NAME }}
           push: true
           cache-from: type=gha,scope=build-${{ env.REGISTRY_NAME }}
+
+      - name: Install Cloud Run CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install apt-transport-https ca-certificates gnupg curl
+          curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo gpg --dearmor -o /usr/share/keyrings/cloud.google.gpg
+          echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
+          sudo apt-get update && sudo apt-get install google-cloud-cli
+          gcloud init
+          gcloud auth login --cred-file=service-account.json
+          gcloud auth list
+
 
       
 
