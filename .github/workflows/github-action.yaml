@@ -79,6 +79,7 @@ jobs:
         run: |
           docker pull ymcsabo/${{ env.IMAGE_NAME }}
           docker tag ymcsabo/${{ env.IMAGE_NAME }} gcr.io/$PROJECT_ID/${{ env.IMAGE_NAME }}
+          docker push gcr.io/$PROJECT_ID/${{ env.IMAGE_NAME }}
           gcloud run deploy niffler-backend-api --image gcr.io/$PROJECT_ID/${{ env.IMAGE_NAME }} --region asia-east1
 
 
