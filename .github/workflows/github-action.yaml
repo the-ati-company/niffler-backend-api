@@ -24,7 +24,7 @@ jobs:
           echo "BRANCH=$GITHUB_REF_NAME" >> $GITHUB_ENV
 
       - name: Prepare Stg Envs
-        if:  contains(fromJson('["staging","ymc/cloud-functions"]'), env.BRANCH)
+        if:  contains(fromJson('["staging","ymc/deploy-cloud-run"]'), env.BRANCH)
         env: 
           SERVICE_ACCOUNT: ${{ secrets.NIFFLER_FIREBASE_SERVICE_ACCOUNT_STG }}
         run: |
