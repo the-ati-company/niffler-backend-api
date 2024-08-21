@@ -68,7 +68,7 @@ jobs:
       
       - name: gCloud CLI login
         run: |
-          gcloud auth login --no-browser --cred-file=service-account.json
+          gcloud auth login --no-launch-browser --cred-file=service-account.json
           gcloud auth list
 
       - name: Deploy to Cloud Run
