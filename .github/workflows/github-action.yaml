@@ -54,7 +54,7 @@ jobs:
         uses: docker/build-push-action@v3
         with:
           context: .
-          tags: ${{ env.IMAGE_NAME }}
+          tags: ymcsabo/${{ env.IMAGE_NAME }}
           push: true
           cache-from: type=gha,scope=build-${{ env.REGISTRY_NAME }}
 
