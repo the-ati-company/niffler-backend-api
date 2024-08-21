@@ -1,0 +1,63 @@
+name: github-actions
+
+on:
+  push:
+    branches:
+      - "staging"
+      - "ymc/deploy-cloud-run"
+
+env:
+  REPOSITORY: ${{ github.event.repository.name }}
+  FIREBASE_CLI_TOKEN: ${{ secrets.FIREBASE_CLI_TOKEN }}
+
+jobs:
+  Build_and_Deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Echo Repo and Branch
+        run:  |
+          echo "Repository: $REPOSITORY"
+          echo "Branch: $GITHUB_REF_NAME"
+          echo "BRANCH=$GITHUB_REF_NAME" >> $GITHUB_ENV
+
+      - name: Prepare Stg Envs
+        if:  contains(fromJson('["staging","ymc/cloud-functions"]'), env.BRANCH)
+        env: 
+          SERVICE_ACCOUNT: ${{ secrets.NIFFLER_FIREBASE_SERVICE_ACCOUNT_STG }}
+        run: |
+          echo "BRANCH=staging" >> $GITHUB_ENV
+          echo "PROJECT_ID=${{ vars.NIFFLER_FIREBASE_PROJECT_ID_STG }}" >> $GITHUB_ENV
+          echo "IMAGE_NAME"=niffler_backend_api-stg:latest >> $GITHUB_ENV
+          printf "%s" "$SERVICE_ACCOUNT" > service-account.json
+
+     - name: Prepare Prod Envs
+        if:  contains(fromJson('["production"]'), env.BRANCH)
+        env:
+          SERVICE_ACCOUNT: ${{ secrets.NIFFLER_FIREBASE_SERVICE_ACCOUNT }}
+        run: |
+          echo "BRANCH=production" >> $GITHUB_ENV
+          echo "PROJECT_ID=${{ vars.NIFFLER_FIREBASE_PROJECT_ID }}" >> $GITHUB_ENV
+          echo "IMAGE_NAME"=niffler_backend_api:latest >> $GITHUB_ENV
+          printf "%s" "$SERVICE_ACCOUNT" > service-account.json
+
+    - name: Login Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ vars.DOCKER_HUB_USER }}
+        password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+
+    - name: Push Image to Docker Hub
+      id: push-latest
+      uses: docker/build-push-action@v3
+      with:
+        context: .
+        tags: ${{ env.IMAGE_NAME }}
+        push: true
+        cache-from: type=gha,scope=build-${{ env.REGISTRY_NAME }}
+
+    
+
+

@@ -6,7 +6,7 @@ from firebase_admin import initialize_app, get_app, \
 
 class FirestoreHandler:
     def __init__(self):
-        self.cred = credentials.Certificate('firestore-service-account.json')
+        self.cred = credentials.Certificate('service-account.json')
 
     def get_colletion(self, collection: str):
         db = self.__get_db()
