@@ -32,6 +32,7 @@ jobs:
           echo "BRANCH=staging" >> $GITHUB_ENV
           echo "PROJECT_ID=${{ vars.NIFFLER_FIREBASE_PROJECT_ID_STG }}" >> $GITHUB_ENV
           echo "IMAGE_NAME"=niffler_backend_api-stg:latest >> $GITHUB_ENV
+          echo "GLOUD_REPO_NAME"=asia-southeast1-docker.pkg.dev/niffler-stg/niffler-backend-api >> $GITHUB_ENV
           printf "%s" "$SERVICE_ACCOUNT" > service-account.json
           printf "%s" "$CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER" > could-run-service-account.json
 
@@ -44,6 +45,8 @@ jobs:
           echo "BRANCH=production" >> $GITHUB_ENV
           echo "PROJECT_ID=${{ vars.NIFFLER_FIREBASE_PROJECT_ID }}" >> $GITHUB_ENV
           echo "IMAGE_NAME"=niffler_backend_api:latest >> $GITHUB_ENV
+          echo "GLOUD_REPO_NAME"=asia-southeast1-docker.pkg.dev/niffler/niffler-backend-api >> $GITHUB_ENV
+          printf "%s" "$SERVICE_ACCOUNT" > service-account.json
           printf "%s" "$CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER" > could-run-service-account.json
 
       - name: Login Docker Hub
@@ -78,9 +81,9 @@ jobs:
       - name: Deploy to Cloud Run
         run: |
           docker pull ymcsabo/${{ env.IMAGE_NAME }}
-          docker tag ymcsabo/${{ env.IMAGE_NAME }} gcr.io/$PROJECT_ID/${{ env.IMAGE_NAME }}
-          docker push gcr.io/$PROJECT_ID/${{ env.IMAGE_NAME }}
-          gcloud run deploy niffler-backend-api --image gcr.io/$PROJECT_ID/${{ env.IMAGE_NAME }} --region asia-east1
+          docker tag ymcsabo/${{ env.IMAGE_NAME }} ${{ env.GLOUD_REPO_NAME }}/niffler-backend-api/${{ env.IMAGE_NAME }}
+          docker push ${{ env.GLOUD_REPO_NAME }}/niffler-backend-api/${{ env.IMAGE_NAME }}
+          gcloud run deploy niffler-backend-api --image ${{ env.GLOUD_REPO_NAME }}/niffler-backend-api/${{ env.IMAGE_NAME }} --region asia-east1
 
 
       
