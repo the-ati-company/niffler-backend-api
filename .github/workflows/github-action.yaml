@@ -72,18 +72,15 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/cloud.google.gpg] https://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /etc/apt/sources.list.d/google-cloud-sdk.list
           sudo apt-get update && sudo apt-get install google-cloud-cli
       
-      - name: gCloud CLI login
-        run: |
-          gcloud auth login --no-launch-browser --cred-file=could-run-service-account.json
-          gcloud config set project $PROJECT_ID
-          gcloud auth list
-
       - name: Deploy to Cloud Run
         run: |
           docker pull ymcsabo/${{ env.IMAGE_NAME }}
           docker tag ymcsabo/${{ env.IMAGE_NAME }} ${{ env.GCLOUD_REPO_NAME }}/niffler-backend-api:latest
           docker push ${{ env.GCLOUD_REPO_NAME }}/niffler-backend-api:latest
-          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://asia-southeast1-docker.pkg.dev
+          gcloud auth login --no-launch-browser --cred-file=could-run-service-account.json
+          gcloud config set project $PROJECT_ID
+          gcloud auth list
+          gcloud auth configure-docker asia-southeast1-docker.pkg.dev
           gcloud run deploy niffler-backend-api --image ${{ env.GCLOUD_REPO_NAME }}/niffler-backend-api:latest --region asia-east1
 
 
