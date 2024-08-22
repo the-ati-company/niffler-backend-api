@@ -83,7 +83,7 @@ jobs:
           docker pull ymcsabo/${{ env.IMAGE_NAME }}
           docker tag ymcsabo/${{ env.IMAGE_NAME }} ${{ env.GCLOUD_REPO_NAME }}/niffler-backend-api:latest
           docker push ${{ env.GCLOUD_REPO_NAME }}/niffler-backend-api:latest
-          gcloud auth configure-docker asia-southeast1-docker.pkg.dev
+          gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://asia-southeast1-docker.pkg.dev
           gcloud run deploy niffler-backend-api --image ${{ env.GCLOUD_REPO_NAME }}/niffler-backend-api:latest --region asia-east1
 
 
