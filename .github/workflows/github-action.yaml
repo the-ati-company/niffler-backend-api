@@ -32,7 +32,7 @@ jobs:
           echo "BRANCH=staging" >> $GITHUB_ENV
           echo "PROJECT_ID=${{ vars.NIFFLER_FIREBASE_PROJECT_ID_STG }}" >> $GITHUB_ENV
           echo "IMAGE_NAME"=niffler_backend_api:stg-latest >> $GITHUB_ENV
-          echo "GCLOUD_REPO_NAME=asia-southeast1-docker.pkg.dev/niffler-stg" >> $GITHUB_ENV
+          echo "GCLOUD_REPO_NAME=asia-southeast1-docker.pkg.dev/niffler-stg/niffler-backend-api" >> $GITHUB_ENV
           printf "%s" "$SERVICE_ACCOUNT" > service-account.json
           printf "%s" "$CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER" > could-run-service-account.json
 
@@ -45,7 +45,7 @@ jobs:
           echo "BRANCH=production" >> $GITHUB_ENV
           echo "PROJECT_ID=${{ vars.NIFFLER_FIREBASE_PROJECT_ID }}" >> $GITHUB_ENV
           echo "IMAGE_NAME"=niffler_backend_api:latest >> $GITHUB_ENV
-          echo "GCLOUD_REPO_NAME=asia-southeast1-docker.pkg.dev/niffler" >> $GITHUB_ENV
+          echo "GCLOUD_REPO_NAME=asia-southeast1-docker.pkg.dev/niffler/niffler-backend-api" >> $GITHUB_ENV
           printf "%s" "$SERVICE_ACCOUNT" > service-account.json
           printf "%s" "$CLOUD_RUN_SERVICE_ACCOUNT_FILE_NIFFLER" > could-run-service-account.json
 
@@ -83,7 +83,7 @@ jobs:
           docker pull ymcsabo/${{ env.IMAGE_NAME }}
           docker tag ymcsabo/${{ env.IMAGE_NAME }} ${{ env.GCLOUD_REPO_NAME }}/niffler-backend-api:latest
           gcloud auth configure-docker asia-southeast1-docker.pkg.dev
-          docker push https://${{ env.GCLOUD_REPO_NAME }}/niffler-backend-api:latest
+          docker push ${{ env.GCLOUD_REPO_NAME }}/niffler-backend-api:latest
           gcloud run deploy niffler-backend-api --image ${{ env.GCLOUD_REPO_NAME }}/niffler-backend-api:latest --region asia-east1
 
 
