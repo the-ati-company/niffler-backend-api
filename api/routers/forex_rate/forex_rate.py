@@ -27,8 +27,8 @@ def get_forex_rate(pairs: ForexRateRequest) -> ForexRates:
             rate = all_rates[pair]['Exrate']
             updated_time = all_rates[pair]['UTC']
             forex_rate = ForexRate(
-                base_currency=base_currency,
-                quote_currency=q_c,
+                base=base_currency,
+                quote=q_c,
                 rate=rate,
                 updated_time=updated_time)
             forex_rates.rates.append(forex_rate)
