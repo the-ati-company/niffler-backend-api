@@ -19,9 +19,9 @@ def get_forex_rate(pairs: ForexRateRequest) -> ForexRates:
     all_rates = r.json()
     forex_rates = ForexRates()
 
-    base_currency = pairs.base_currency
+    base_currency = pairs.base
 
-    for q_c in pairs.quote_currencies:
+    for q_c in pairs.quote:
         pair = f"{base_currency}{q_c}"
         if pair in all_rates:
             rate = all_rates[pair]['Exrate']

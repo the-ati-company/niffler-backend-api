@@ -5,8 +5,8 @@ from pydantic import BaseModel
 
 
 class ForexRate(BaseModel):
-    base_currency: str = "USD"
-    quote_currency: str
+    base: str = "USD"
+    quote: str
     rate: float
     updated_time: str
 
@@ -16,5 +16,5 @@ class ForexRates(BaseModel):
 
 
 class ForexRateRequest(BaseModel):
-    base_currency: str = "USD"
-    quote_currencies: List[str]
+    base: str = "USD"
+    quote: List[str]
