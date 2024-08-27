@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from api.routers.healthcheck import healthcheck
 from api.routers.symbol_list import symbol_list
 from api.routers.stock import stock
+from api.routers.forex_rate import forex_rate
 
 tags = [
     {
@@ -17,6 +18,10 @@ tags = [
     {
         'name': 'Stcok',
         'description': 'Stcok Info API'
+    },
+    {
+        'name': 'Forex',
+        'description': 'Forex Exchange Rate API'
     },
 ]
 
@@ -41,3 +46,6 @@ app.include_router(symbol_list.router,
                    prefix="/api/symbols", tags=["Symbols"])
 app.include_router(stock.router,
                    prefix="/api/stock", tags=["Stcok"])
+
+app.include_router(forex_rate.router,
+                   prefix="/api/forex", tags=["Forex"])
