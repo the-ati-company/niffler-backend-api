@@ -87,7 +87,7 @@ jobs:
 
       - name: Deploy to Cloud Run
         run: |
-          gcloud run deploy niffler-backend-api --image ${{ env.GCLOUD_REPO_NAME }}/niffler-backend-api:latest --region asia-east1 --port 8087 --memory 128Mi --cpu 0.125 --concurrency 1
+          gcloud run deploy niffler-backend-api --image ${{ env.GCLOUD_REPO_NAME }}/niffler-backend-api:latest --region asia-east1 --port 8087 --memory 256Mi --cpu 0.125 --concurrency 1
 
 
       
