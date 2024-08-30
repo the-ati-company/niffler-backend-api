@@ -19,4 +19,4 @@ COPY service-account.json service-account.json
 
 EXPOSE 8087
 
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8087", "--workers", "4"]
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8087", "--workers", "2"]

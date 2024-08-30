@@ -15,6 +15,10 @@ class ForexRates(BaseModel):
     rates: List[ForexRate] = []
 
 
+class ForexAvaliableSymbols(BaseModel):
+    symbols: List[str] = []
+
+
 class ForexRateRequest(BaseModel):
     base: str = "USD"
     quote: List[str]
