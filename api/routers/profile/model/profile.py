@@ -30,7 +30,7 @@ class Holding(BaseModel):
 
 class HoldingGroup(BaseModel):
     alias: str = ""
-    holdings: List[Holding]
+    holdings: Optional[List[Holding]] = []
     sequence: Optional[int] = None
 
     @validator('holdings')
@@ -41,7 +41,7 @@ class HoldingGroup(BaseModel):
 
 class Portfolio(BaseModel):
     alias: str = ""
-    holding_groups: List[HoldingGroup]
+    holding_groups: Optional[List[HoldingGroup]] = []
     sequence: Optional[int] = None
 
     @validator('holding_groups')
