@@ -15,7 +15,7 @@ def sequence_arranger(v, sort_field="alias"):
             need_rearrange_sequence = True
             break
     if need_rearrange_sequence:
-        # sort by alias
+        # sort by field, default alias
         v = sorted(v, key=lambda x: x.__getattribute__(sort_field))
         for i, item in enumerate(v):
             item.sequence = i
