@@ -56,6 +56,8 @@ class Profile(BaseModel):
     user_name: str = ""
     email: str = ""
     phone: str = ""
+    primary_currency: str = "USD"
+    secondary_currency: str = "TWD"
     portfolios: List[Portfolio] = []
 
     @validator('portfolios')
