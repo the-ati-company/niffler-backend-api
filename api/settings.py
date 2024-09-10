@@ -5,6 +5,7 @@ from api.routers.healthcheck import healthcheck
 from api.routers.symbol_list import symbol_list
 from api.routers.stock import stock
 from api.routers.forex_rate import forex_rate
+from api.routers.profile import profile
 
 tags = [
     {
@@ -22,6 +23,10 @@ tags = [
     {
         'name': 'Forex',
         'description': 'Forex Exchange Rate API'
+    },
+    {
+        'name': 'Profile',
+        'description': 'User Profile API'
     },
 ]
 
@@ -49,3 +54,6 @@ app.include_router(stock.router,
 
 app.include_router(forex_rate.router,
                    prefix="/api/forex", tags=["Forex"])
+
+app.include_router(profile.router,
+                   prefix="/api/profile", tags=["Profile"])
